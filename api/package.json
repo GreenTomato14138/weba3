@@ -1,0 +1,29 @@
+{
+  "name": "charity-events-api",
+  "version": "1.0.0",
+  "description": "PROG2002 A2 - RESTful API layer for the Charity Events case study (Node.js + Express + MySQL)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "db:setup": "echo \"Run database/charityevents_db.sql in MySQL Workbench or: mysql -u root -p < database/charityevents_db.sql\""
+  },
+  "keywords": [
+    "PROG2002",
+    "charity-events",
+    "express",
+    "mysql",
+    "restful-api"
+  ],
+  "author": "Boyuan Liu (24832410)",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^18.0.3",
+    "express": "^5.2.1",
+    "express-rate-limit": "^8.7.0",
+    "helmet": "^8.3.0",
+    "morgan": "^1.12.1",
+    "mysql2": "^3.24.4"
+  }
+}
