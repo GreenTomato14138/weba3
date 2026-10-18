@@ -1,0 +1,71 @@
+<a class="skip-link" href="#main">Skip to content</a>
+
+<!-- Day / night atmosphere: sun/moon, karst ridges, petals by day, fireflies by night -->
+<div class="atmos" aria-hidden="true">
+  <div class="atmos-sky"></div>
+  <div class="atmos-luminary"></div>
+  <div class="atmos-karst k1"></div>
+  <div class="atmos-karst k2"></div>
+  @for (p of petals; track $index) {
+    <span class="atmos-petal" [style.left.%]="p.left" [style.animation-duration.s]="p.duration" [style.animation-delay.s]="p.delay" [style.--drift.px]="p.drift"></span>
+  }
+  @for (f of fireflies; track $index) {
+    <span class="atmos-fly" [style.left.%]="f.left" [style.top.%]="30 + ($index * 4) % 60" [style.animation-duration.s]="f.duration" [style.animation-delay.s]="f.delay"></span>
+  }
+</div>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" routerLink="/" (click)="closeMenu()">
+      <span class="brand-mark">CE</span>
+      <span class="brand-text">Charity<strong>Events</strong></span>
+    </a>
+
+    <button
+      type="button"
+      class="nav-toggle"
+      aria-label="Toggle navigation"
+      [attr.aria-expanded]="menuOpen()"
+      (click)="toggleMenu()"
+    >
+      <span></span><span></span><span></span>
+    </button>
+
+    <nav class="site-nav" [class.is-open]="menuOpen()">
+      <a routerLink="/" routerLinkActive="is-active" [routerLinkActiveOptions]="{ exact: true }" (click)="closeMenu()">
+        Home
+      </a>
+      <a routerLink="/search" routerLinkActive="is-active" (click)="closeMenu()">Search</a>
+      <a routerLink="/register" routerLinkActive="is-active" (click)="closeMenu()">Register</a>
+      <button
+        type="button"
+        class="theme-toggle"
+        (click)="toggleTheme()"
+        [attr.aria-label]="themeService.theme() === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'"
+      >
+        @if (themeService.theme() === 'dark') {
+          <span class="theme-icon theme-icon--sun" aria-hidden="true"></span>
+          <span class="theme-label">Light</span>
+        } @else {
+          <span class="theme-icon theme-icon--moon" aria-hidden="true"></span>
+          <span class="theme-label">Dark</span>
+        }
+      </button>
+      <a class="nav-cta" href="http://localhost:4300" target="_blank" rel="noopener">Staff console</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <router-outlet />
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <p class="footer-brand">Charity<strong>Events</strong></p>
+    <p class="footer-note">
+      Built with Angular 22 + TypeScript, served by a Node.js / Express API on MySQL.
+    </p>
+    <p class="footer-copy">&copy; {{ year }} Boyuan Liu</p>
+  </div>
+</footer>

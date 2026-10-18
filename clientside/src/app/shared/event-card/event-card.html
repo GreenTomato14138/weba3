@@ -1,0 +1,32 @@
+<article class="evcard">
+  <a class="evcard__media" [routerLink]="['/event', event().event_id]">
+    <img [src]="image()" [alt]="event().event_name" loading="lazy" />
+    <span class="evcard__cat" [style.background]="event().category_colour || '#6366f1'">
+      {{ event().category_name }}
+    </span>
+    @if (event().is_free) {
+      <span class="evcard__free">Free</span>
+    }
+  </a>
+
+  <div class="evcard__body">
+    <h3 class="evcard__title">
+      <a [routerLink]="['/event', event().event_id]">{{ event().event_name }}</a>
+    </h3>
+
+    <p class="evcard__meta">{{ dateLabel() }} &middot; {{ event().venue }}, {{ event().suburb }}</p>
+    <p class="evcard__summary">{{ event().summary }}</p>
+
+    <div class="evcard__progress">
+      <div class="evcard__bar">
+        <span [style.width.%]="progressWidth()"></span>
+      </div>
+      <small>{{ progressWidth() }}% of goal &middot; {{ event().registration_count }} booked</small>
+    </div>
+
+    <div class="evcard__foot">
+      <span class="evcard__price">{{ price() }}</span>
+      <a class="evcard__go" [routerLink]="['/event', event().event_id]">Details</a>
+    </div>
+  </div>
+</article>

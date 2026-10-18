@@ -1,0 +1,2 @@
+/* Global entry point. The full colour theme lives in theme.css. */
+@import './theme.css';
