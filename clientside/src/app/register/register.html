@@ -1,0 +1,113 @@
+<section class="wrap section">
+  @if (confirmation(); as booking) {
+    <!-- ---------- confirmation state ---------- -->
+    <div class="confirm">
+      <div class="confirm__tick">&#10003;</div>
+      <h1>You are booked in</h1>
+      <p class="confirm__msg">{{ message() }}</p>
+
+      <dl class="confirm__grid">
+        <div><dt>Reference</dt><dd>#{{ booking.registration_id }}</dd></div>
+        <div><dt>Event</dt><dd>{{ booking.event_name }}</dd></div>
+        <div><dt>Name</dt><dd>{{ booking.full_name }}</dd></div>
+        <div><dt>Tickets</dt><dd>{{ booking.tickets }}</dd></div>
+      </dl>
+
+      <div class="confirm__actions">
+        <a class="btn btn--primary" [routerLink]="['/event', booking.event_id]">View the event</a>
+        <a class="btn btn--ghost" routerLink="/search">Find another</a>
+        <a class="btn btn--ghost" routerLink="/">Back home</a>
+      </div>
+    </div>
+  } @else {
+    <!-- ---------- form state ---------- -->
+    <header class="section__head">
+      <h1>Register for an event</h1>
+      <p>One form, validated in the browser, stored by the API.</p>
+    </header>
+
+    <div class="register-grid">
+      <aside class="panel event-summary">
+        @if (loading()) {
+          <div class="skeleton"></div>
+        } @else if (event(); as item) {
+          <span class="badge" [style.background]="item.category_colour || '#6366f1'">{{ item.category_name }}</span>
+          <h2>{{ item.event_name }}</h2>
+          <p>{{ dateLabel(item) }}</p>
+          <p>{{ item.venue }}, {{ item.suburb }} {{ item.city }}</p>
+          <p class="event-summary__price">{{ item.is_free ? 'Free' : money(item.ticket_price) }}</p>
+          <p class="event-summary__seats">
+            {{ item.registration_count }} booked &middot; {{ item.tickets_taken }}/{{ item.capacity }} tickets taken
+          </p>
+        } @else {
+          <p class="alert">
+            No event selected. Open this page from an event&rsquo;s
+            <a routerLink="/search">search results</a> to book a place.
+          </p>
+        }
+      </aside>
+
+      <form class="panel" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+        @if (error()) {
+          <p class="alert alert--error">{{ error() }}</p>
+        }
+
+        <label class="field">
+          <span>Full name</span>
+          <input type="text" formControlName="full_name" autocomplete="name" />
+          @if (errorFor('full_name')) {
+            <small class="field__error">{{ errorFor('full_name') }}</small>
+          } @else if (form.controls.full_name.touched && form.controls.full_name.invalid) {
+            <small class="field__error">Please enter at least 2 characters.</small>
+          }
+        </label>
+
+        <label class="field">
+          <span>Email</span>
+          <input type="email" formControlName="email" autocomplete="email" />
+          @if (errorFor('email')) {
+            <small class="field__error">{{ errorFor('email') }}</small>
+          } @else if (form.controls.email.touched && form.controls.email.invalid) {
+            <small class="field__error">Enter a valid email, e.g. name@example.com.</small>
+          }
+        </label>
+
+        <label class="field">
+          <span>Phone</span>
+          <input type="tel" formControlName="phone" autocomplete="tel" />
+          @if (errorFor('phone')) {
+            <small class="field__error">{{ errorFor('phone') }}</small>
+          } @else if (form.controls.phone.touched && form.controls.phone.invalid) {
+            <small class="field__error">Digits, spaces and + - ( ) only, at least 6 digits.</small>
+          }
+        </label>
+
+        <label class="field">
+          <span>Number of tickets</span>
+          <input type="number" formControlName="tickets" min="1" max="50" />
+          @if (errorFor('tickets')) {
+            <small class="field__error">{{ errorFor('tickets') }}</small>
+          } @else if (form.controls.tickets.touched && form.controls.tickets.invalid) {
+            <small class="field__error">Choose between 1 and 50 tickets.</small>
+          }
+        </label>
+
+        <label class="field">
+          <span>Notes <em>(optional)</em></span>
+          <textarea formControlName="notes" rows="3" maxlength="255"></textarea>
+          @if (errorFor('notes')) {
+            <small class="field__error">{{ errorFor('notes') }}</small>
+          }
+        </label>
+
+        <button type="submit" class="btn btn--primary btn--wide" [disabled]="saving()">
+          {{ saving() ? 'Sending…' : 'Confirm booking' }}
+        </button>
+
+        <p class="fineprint">
+          By registering you agree that your details are shared with the organising charity.
+        </p>
+      </form>
+    </div>
+  }
+</section>

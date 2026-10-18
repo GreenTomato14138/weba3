@@ -1,0 +1,117 @@
+@if (loading()) {
+  <section class="wrap section"><div class="skeleton skeleton--hero"></div></section>
+} @else if (error()) {
+  <section class="wrap section">
+    <p class="alert alert--error">{{ error() }}</p>
+    <p><a class="btn btn--ghost" routerLink="/search">Back to search</a></p>
+  </section>
+} @else if (event(); as item) {
+  <section class="detail-hero">
+    <div class="wrap detail-hero__inner">
+      <img class="detail-hero__img" [src]="image()" [alt]="item.event_name" />
+      <div class="detail-hero__body">
+        <span class="badge" [style.background]="item.category_colour || '#6366f1'">{{ item.category_name }}</span>
+        <h1>{{ item.event_name }}</h1>
+        <p class="detail-hero__meta">{{ dateLabel() }} &middot; {{ item.venue }}, {{ item.suburb }} {{ item.city }}</p>
+        <p class="detail-hero__org">
+          Organised by <strong>{{ item.organisation_name }}</strong>
+        </p>
+
+        <div class="progress">
+          <div class="progress__bar">
+            <span [style.width.%]="item.progress_pct"></span>
+          </div>
+          <div class="progress__labels">
+            <span><strong>{{ money(item.raised_amount) }}</strong> raised</span>
+            <span>goal {{ money(item.goal_amount) }}</span>
+          </div>
+        </div>
+
+        <div class="detail-hero__cta">
+          <span class="price">{{ price() }}</span>
+          <a class="btn btn--primary" [routerLink]="['/register']" [queryParams]="{ id: item.event_id }">
+            Register now
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap section detail-grid">
+    <article class="panel">
+      <h2>About this event</h2>
+      <p class="prose">{{ item.full_description || item.summary }}</p>
+
+      @if (item.updates?.length) {
+        <h3>Organiser updates</h3>
+        <ul class="updates">
+          @for (update of item.updates!; track update.update_id) {
+            <li>
+              <strong>{{ update.title }}</strong>
+              <span>{{ update.posted_at }}</span>
+              <p>{{ update.body }}</p>
+            </li>
+          }
+        </ul>
+      }
+    </article>
+
+    <aside class="panel">
+      <h2>Who has booked</h2>
+      <p class="panel__note">Most recent purchase first &mdash; {{ item.registration_count }} booking(s), {{ item.tickets_taken }} ticket(s).</p>
+
+      @if (item.registrations?.length) {
+        <ol class="bookings">
+          @for (reg of item.registrations!; track reg.registration_id) {
+            <li>
+              <span class="bookings__avatar">{{ reg.full_name.charAt(0) }}</span>
+              <span class="bookings__who">
+                <strong>{{ reg.full_name }}</strong>
+                <small>{{ bookedAt(reg.registration_date) }}</small>
+              </span>
+              <span class="bookings__tickets">&times;{{ reg.tickets }}</span>
+            </li>
+          }
+        </ol>
+      } @else {
+        <p class="alert">No bookings yet &mdash; be the first to register.</p>
+      }
+
+      @if (item.recent_donations?.length) {
+        <h3>Recent donations</h3>
+        <ul class="donations">
+          @for (gift of item.recent_donations!; track gift.donated_at) {
+            <li><strong>{{ gift.donor_name }}</strong> gave {{ money(gift.amount) }}</li>
+          }
+        </ul>
+      }
+    </aside>
+  </section>
+
+  <section class="wrap section">
+    <h2 class="section__head">Weather at the venue</h2>
+
+    @if (weatherError()) {
+      <p class="alert">{{ weatherError() }}</p>
+    } @else if (forecast().length) {
+      <div class="weather">
+        @for (day of forecast(); track day.date) {
+          <div class="weather__day">
+            <span class="weather__date">{{ dayName(day.date) }}</span>
+            <span class="weather__icon">{{ day.icon }}</span>
+            <span class="weather__desc">{{ day.description }}</span>
+            <span class="weather__temp">
+              {{ day.temp_max }}&deg; / {{ day.temp_min }}&deg;
+            </span>
+            <span class="weather__rain">Rain {{ day.rain_chance }}%</span>
+          </div>
+        }
+      </div>
+      <p class="weather__source">
+        Forecast supplied by Open-Meteo via our own API &mdash; external API integration (Part 6).
+      </p>
+    } @else {
+      <p class="alert">Loading the forecast&hellip;</p>
+    }
+  </section>
+}

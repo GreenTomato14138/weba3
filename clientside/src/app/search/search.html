@@ -1,0 +1,93 @@
+<section class="wrap section">
+  <header class="section__head">
+    <h1>Search charity events</h1>
+    <p>Every filter is optional &mdash; combine them to narrow the list down.</p>
+  </header>
+
+  <form class="filters" [formGroup]="form" (ngSubmit)="run()">
+    <div class="filters__row">
+      <label class="field">
+        <span>Keyword</span>
+        <input type="text" formControlName="q" placeholder="fun run, gala, market&hellip;" />
+      </label>
+      <label class="field">
+        <span>Location</span>
+        <input type="text" formControlName="location" placeholder="suburb, venue or city" />
+      </label>
+    </div>
+
+    <div class="filters__row">
+      <label class="field">
+        <span>From</span>
+        <input type="date" formControlName="from" />
+      </label>
+      <label class="field">
+        <span>To</span>
+        <input type="date" formControlName="to" />
+      </label>
+      <label class="field">
+        <span>Sort by</span>
+        <select formControlName="sort">
+          <option value="date">Date &mdash; soonest first</option>
+          <option value="date-desc">Date &mdash; latest first</option>
+          <option value="progress">Fundraising progress</option>
+          <option value="raised">Amount raised</option>
+          <option value="price">Ticket price</option>
+          <option value="name">Name A&ndash;Z</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="filters__cats">
+      <span class="filters__label">Categories</span>
+      <div class="chiprow">
+        @for (cat of categories(); track cat.category_id) {
+          <button type="button" class="chip" [class.is-on]="isChosen(cat.slug)" (click)="toggleCategory(cat.slug)">
+            <span class="chip__dot" [style.background]="cat.colour_hex || '#6366f1'"></span>
+            {{ cat.category_name }}
+          </button>
+        }
+      </div>
+    </div>
+
+    <label class="check">
+      <input type="checkbox" formControlName="free" />
+      Free events only
+    </label>
+
+    @if (dateError()) {
+      <p class="alert alert--error">{{ dateError() }}</p>
+    }
+
+    <div class="filters__actions">
+      <button type="submit" class="btn btn--primary" [disabled]="loading()">
+        {{ loading() ? 'Searching…' : 'Search' }}
+      </button>
+      <button type="button" class="btn btn--ghost" (click)="reset()">Reset</button>
+    </div>
+  </form>
+
+  @if (searched()) {
+    <p class="results__count"><strong>{{ count() }}</strong> event(s) matched.</p>
+  }
+
+  @if (error()) {
+    <p class="alert alert--error">{{ error() }}</p>
+  }
+
+  @if (loading()) {
+    <div class="grid">
+      @for (placeholder of [1, 2, 3, 4, 5, 6]; track placeholder) {
+        <div class="skeleton"></div>
+      }
+    </div>
+  } @else {
+    <div class="grid">
+      @for (item of results(); track item.event_id) {
+        <app-event-card [event]="item" />
+      } @empty {
+        <p class="alert">No events match those filters. Try removing one or two.</p>
+      }
+    </div>
+  }
+</section>

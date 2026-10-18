@@ -1,0 +1,94 @@
+<section class="hero">
+  <div class="wrap hero__inner">
+    <div class="hero__copy">
+      <p class="hero__eyebrow">Guangxi community fundraising</p>
+      <h1 class="hero__title">
+        Find a charity event and
+        <span class="hero__accent">book your place</span>
+      </h1>
+      <p class="hero__lede">
+        Charities publish an event, the public browses and registers, and every dollar of the
+        ticket price goes to the cause. Browse what is coming up, or search by cause, suburb or date.
+      </p>
+      <div class="hero__actions">
+        <a class="btn btn--primary" routerLink="/search">Search events</a>
+        <a class="btn btn--ghost" routerLink="/register">Register now</a>
+      </div>
+
+      @if (stats(); as s) {
+        <dl class="hero__stats">
+          <div><dt>Upcoming</dt><dd>{{ s.upcoming_events }}</dd></div>
+          <div><dt>Raised</dt><dd>{{ money(s.total_raised) }}</dd></div>
+          <div><dt>Supporters</dt><dd>{{ s.total_supporters }}</dd></div>
+          <div><dt>Charities</dt><dd>{{ s.total_organisations }}</dd></div>
+        </dl>
+      }
+    </div>
+
+    @if (current(); as hero) {
+      <div class="hero__carousel">
+        <div class="carousel__stage">
+          <img [src]="'/assets/img/' + (hero.image_url || 'cleanup.jpg').split('/').pop()" [alt]="hero.event_name" />
+          <div class="carousel__caption">
+            <span class="carousel__cat">{{ hero.category_name }}</span>
+            <h2>{{ hero.event_name }}</h2>
+            <p>{{ hero.venue }} &middot; {{ hero.city }}</p>
+            <a class="btn btn--light" [routerLink]="['/event', hero.event_id]">View event</a>
+          </div>
+          <button type="button" class="carousel__arrow carousel__arrow--prev" (click)="previous()">&#8249;</button>
+          <button type="button" class="carousel__arrow carousel__arrow--next" (click)="next()">&#8250;</button>
+        </div>
+        <div class="carousel__dots">
+          @for (item of featured(); track item.event_id; let i = $index) {
+            <button type="button" [class.is-on]="i === slide()" (click)="goTo(i)" [attr.aria-label]="'Slide ' + (i + 1)"></button>
+          }
+        </div>
+      </div>
+    }
+  </div>
+</section>
+
+@if (categories().length) {
+  <section class="wrap section">
+    <header class="section__head">
+      <h2>Browse by cause</h2>
+      <p>Pick a category to jump straight to matching events.</p>
+    </header>
+    <div class="chiprow">
+      @for (cat of categories(); track cat.category_id) {
+        <a class="chip" [routerLink]="['/search']" [queryParams]="{ category: cat.slug }">
+          <span class="chip__dot" [style.background]="cat.colour_hex || '#6366f1'"></span>
+          {{ cat.category_name }}
+          <small>{{ cat.event_count }}</small>
+        </a>
+      }
+    </div>
+  </section>
+}
+
+<section class="wrap section">
+  <header class="section__head">
+    <h2>Coming up</h2>
+    <p>The next nine published events, soonest first.</p>
+  </header>
+
+  @if (error()) {
+    <p class="alert alert--error">{{ error() }}</p>
+  }
+
+  @if (loading()) {
+    <div class="grid">
+      @for (placeholder of [1, 2, 3, 4, 5, 6]; track placeholder) {
+        <div class="skeleton"></div>
+      }
+    </div>
+  } @else {
+    <div class="grid">
+      @for (item of upcoming(); track item.event_id) {
+        <app-event-card [event]="item" />
+      } @empty {
+        <p class="alert">No upcoming events have been published yet.</p>
+      }
+    </div>
+  }
+</section>
