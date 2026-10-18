@@ -1,0 +1,118 @@
+/* ============================ layout helpers ============================ */
+.wrap {
+  width: min(1240px, 100% - 40px);
+  margin-inline: auto;
+}
+
+/* ================================ top bar =============================== */
+.admin-bar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: linear-gradient(100deg, #1b1f3b 0%, #262a52 55%, #35264f 100%);
+  color: #fff;
+  box-shadow: 0 10px 30px rgba(15, 18, 40, 0.28);
+}
+
+.admin-bar__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  min-height: 70px;
+}
+
+.admin-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: #fff;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.admin-brand__mark {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 11px;
+  background: linear-gradient(135deg, #6366f1, #ec4899);
+  font-size: 0.85rem;
+  font-weight: 800;
+}
+
+.admin-nav { display: flex; align-items: center; gap: 6px; }
+
+.admin-nav a {
+  padding: 9px 15px;
+  border-radius: 999px;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 0.92rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.18s ease, color 0.18s ease;
+}
+
+.admin-nav a:hover { background: rgba(255, 255, 255, 0.12); color: #fff; }
+
+.admin-nav a.is-active {
+  background: linear-gradient(135deg, #06b6d4, #6366f1);
+  color: #fff;
+}
+
+.admin-nav__site {
+  margin-left: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+}
+
+.admin-burger {
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 12px;
+  background: transparent;
+  cursor: pointer;
+}
+
+.admin-burger span { display: block; width: 20px; height: 2px; background: #fff; }
+
+/* ================================= main ================================= */
+.admin-main {
+  padding: 28px 0 40px;
+  min-height: 60vh;
+}
+
+/* ================================ footer ================================ */
+.admin-foot {
+  padding: 22px 0;
+  background: #171a33;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.86rem;
+  text-align: center;
+}
+
+.admin-foot p { margin: 0 0 6px; }
+.admin-foot__note { color: rgba(255, 255, 255, 0.5); font-size: 0.8rem; }
+
+@media (max-width: 860px) {
+  .admin-burger { display: flex; }
+
+  .admin-nav {
+    position: absolute;
+    top: 70px;
+    left: 0;
+    right: 0;
+    display: none;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 2px;
+    padding: 12px 20px 18px;
+    background: #232748;
+  }
+
+  .admin-nav.is-open { display: flex; }
+  .admin-nav__site { margin-left: 0; margin-top: 8px; }
+}

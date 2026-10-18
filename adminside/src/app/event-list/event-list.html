@@ -1,0 +1,80 @@
+<section class="page">
+  <header class="page__head">
+    <div>
+      <h1>Events</h1>
+      <p class="page__sub">Every event in the database, including suspended ones.</p>
+    </div>
+    <a class="btn btn--primary" routerLink="/new">New event</a>
+  </header>
+
+  <div class="toolbar">
+    <input
+      type="search"
+      class="toolbar__search"
+      placeholder="Search by name or venue…"
+      [value]="keyword()"
+      (input)="onSearch($any($event.target).value)"
+    />
+    <select class="toolbar__select" [value]="status()" (change)="onStatus($any($event.target).value)">
+      <option value="all">All statuses</option>
+      <option value="active">Active only</option>
+      <option value="suspended">Suspended only</option>
+    </select>
+  </div>
+
+  @if (notice()) {
+    <p class="alert alert--ok">{{ notice() }}</p>
+  }
+  @if (error()) {
+    <p class="alert alert--error">{{ error() }}</p>
+  }
+
+  @if (loading()) {
+    <p class="alert">Loading events…</p>
+  } @else {
+    <div class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Event</th>
+            <th>Date</th>
+            <th>Venue</th>
+            <th>Price</th>
+            <th>Booked</th>
+            <th>Status</th>
+            <th class="ta-r">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (item of events(); track item.event_id) {
+            <tr>
+              <td>
+                <strong>{{ item.event_name }}</strong>
+                <small>{{ item.category_name }} &middot; {{ item.organisation_name }}</small>
+              </td>
+              <td>{{ dateLabel(item.event_date) }}</td>
+              <td>{{ item.venue }}, {{ item.suburb }}</td>
+              <td>{{ item.is_free ? 'Free' : money(item.ticket_price) }}</td>
+              <td>
+                {{ item.registration_count }} <small>({{ item.tickets_taken }} tickets)</small>
+              </td>
+              <td>
+                <span class="pill" [class.pill--warn]="item.status === 'suspended'">
+                  {{ item.status }}
+                </span>
+              </td>
+              <td class="ta-r">
+                <a class="link" [routerLink]="['/edit', item.event_id]">Edit</a>
+                <button type="button" class="link link--danger" (click)="remove(item)">Delete</button>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="7" class="ta-c">No events match that filter.</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</section>

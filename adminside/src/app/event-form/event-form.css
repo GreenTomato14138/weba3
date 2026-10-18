@@ -1,0 +1,98 @@
+.card {
+  display: grid;
+  gap: 18px;
+  padding: 24px;
+  background: #fff;
+  border: 1px solid var(--line, #e3e6f7);
+  border-radius: 20px;
+  box-shadow: 0 12px 30px rgba(20, 26, 58, 0.08);
+}
+
+fieldset {
+  margin: 0;
+  padding: 16px 18px 18px;
+  border: 1px solid var(--line, #e3e6f7);
+  border-radius: 16px;
+}
+
+legend {
+  padding: 0 8px;
+  color: var(--brand-1, #6366f1);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 14px;
+}
+
+.field { display: grid; gap: 6px; }
+.card > fieldset > .field { margin-bottom: 12px; }
+
+.field span {
+  color: var(--muted, #6b7396);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.field input,
+.field select,
+.field textarea {
+  padding: 11px 13px;
+  border: 1px solid var(--line, #e3e6f7);
+  border-radius: 11px;
+  background: var(--surface-2, #f2f4ff);
+  color: var(--ink, #141a3a);
+  font: inherit;
+  font-size: 0.92rem;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  outline: 2px solid var(--brand-1, #6366f1);
+  outline-offset: 1px;
+}
+
+.span2 { grid-column: span 2; }
+
+.check {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  align-self: end;
+  padding-bottom: 8px;
+  font-size: 0.92rem;
+}
+
+.check input { width: 17px; height: 17px; accent-color: var(--brand-1, #6366f1); }
+
+.err { color: #c62b34; font-size: 0.8rem; font-weight: 600; }
+
+.actions { display: flex; gap: 12px; }
+
+.btn {
+  display: inline-block;
+  padding: 12px 24px;
+  border: 0;
+  border-radius: 999px;
+  font-family: inherit;
+  font-size: 0.94rem;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.btn--primary { background: linear-gradient(135deg, #06b6d4, #6366f1); color: #fff; }
+.btn--ghost { border: 1px solid var(--line, #e3e6f7); background: #fff; color: var(--ink, #141a3a); }
+.btn:disabled { opacity: 0.6; cursor: progress; }
+
+@media (max-width: 700px) {
+  .span2 { grid-column: span 1; }
+}

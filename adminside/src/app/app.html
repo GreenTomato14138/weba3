@@ -1,0 +1,41 @@
+<header class="admin-bar">
+  <div class="wrap admin-bar__inner">
+    <a class="admin-brand" routerLink="/" (click)="closeMenu()">
+      <span class="admin-brand__mark">CE</span>
+      <span class="admin-brand__text">Staff console</span>
+    </a>
+
+    <button
+      type="button"
+      class="admin-burger"
+      aria-label="Toggle navigation"
+      [attr.aria-expanded]="menuOpen()"
+      (click)="toggleMenu()"
+    >
+      <span></span><span></span><span></span>
+    </button>
+
+    <nav class="admin-nav" [class.is-open]="menuOpen()">
+      <a routerLink="/" routerLinkActive="is-active" [routerLinkActiveOptions]="{ exact: true }" (click)="closeMenu()">
+        Events
+      </a>
+      <a routerLink="/new" routerLinkActive="is-active" (click)="closeMenu()">New event</a>
+      <a routerLink="/registrations" routerLinkActive="is-active" (click)="closeMenu()">Registrations</a>
+      <a class="admin-nav__site" href="http://localhost:4200" target="_blank" rel="noopener">View public site</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap admin-main">
+  <router-outlet />
+</main>
+
+<footer class="admin-foot">
+  <div class="wrap">
+    <p>Charity Events staff console &middot; &copy; {{ year }} Boyuan Liu (24832410)</p>
+    <p class="admin-foot__note">
+      Staff console &middot; no login required for this assessment (the brief states
+      &ldquo;assume that authentication is not required&rdquo;).
+    </p>
+  </div>
+</footer>

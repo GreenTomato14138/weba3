@@ -1,0 +1,58 @@
+<section class="page">
+  <header class="page__head">
+    <div>
+      <h1>Registrations</h1>
+      <p class="page__sub">Every booking in the system, newest purchase first.</p>
+    </div>
+    <a class="link" routerLink="/">&larr; Back to events</a>
+  </header>
+
+  @if (notice()) {
+    <p class="alert alert--ok">{{ notice() }}</p>
+  }
+  @if (error()) {
+    <p class="alert alert--error">{{ error() }}</p>
+  }
+
+  @if (loading()) {
+    <p class="alert">Loading bookings…</p>
+  } @else {
+    <div class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Ref</th>
+            <th>Who</th>
+            <th>Contact</th>
+            <th>Event</th>
+            <th>Tickets</th>
+            <th>Booked at</th>
+            <th class="ta-r">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of rows(); track row.registration_id) {
+            <tr>
+              <td>#{{ row.registration_id }}</td>
+              <td><strong>{{ row.full_name }}</strong></td>
+              <td>
+                {{ row.email }}
+                <small>{{ row.phone }}</small>
+              </td>
+              <td>{{ row.event_name }}</td>
+              <td>{{ row.tickets }}</td>
+              <td>{{ when(row.registration_date) }}</td>
+              <td class="ta-r">
+                <button type="button" class="link link--danger" (click)="cancel(row)">Cancel</button>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="7" class="ta-c">No bookings have been made yet.</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</section>
